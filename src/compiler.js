@@ -253,9 +253,14 @@ class Compiler {
    */
   compile (code) {
     // Local variable to provide some context to eval()
-    const native = this.native // eslint-disable-line
-    const { PartialReadError } = require('./utils') // eslint-disable-line
-    return eval(code)() // eslint-disable-line
+    let native = this.native // eslint-disable-line
+    let { PartialReadError } = require('./utils') // eslint-disable-line
+    this._keep_me = { native, PartialReadError }  // eslint-disable-line
+    const result = eval(code)() // eslint-disable-line
+    if (this._keep_me) { // eslint-disable-line
+      delete this._keep_me // eslint-disable-line
+    } // eslint-disable-line
+    return result // eslint-disable-line
   }
 }
 
